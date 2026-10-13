@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ভর্তি সিলেবাস গাইড</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body{font-family:'Hind Siliguri',system-ui,sans-serif}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+<!-- Navbar -->
+<header class="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+    <a href="#top" class="font-bold text-lg text-slate-900">সিলেবাস গাইড</a>
+    <nav class="hidden sm:flex gap-6 text-sm font-medium text-slate-600">
+      <a href="#subjects" class="hover:text-slate-900">বিষয়সমূহ</a>
+      <a href="#detail" class="hover:text-slate-900">বিস্তারিত</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Hero -->
+<section id="top" class="bg-slate-900 text-white">
+  <div class="max-w-6xl mx-auto px-4 py-16 sm:py-24">
+    <h1 class="text-3xl sm:text-5xl font-bold leading-tight max-w-3xl">ভর্তি পরীক্ষার সিলেবাস, এক জায়গায়</h1>
+    <p class="mt-4 text-slate-300 max-w-xl text-lg">যেকোনো বিষয়ে ক্লিক করুন, সেই বিষয়ের সব টপিক ও বিস্তারিত নিচেই দেখতে পাবেন।</p>
+    <a href="#subjects" class="inline-block mt-8 bg-white text-slate-900 font-semibold px-6 py-3 rounded-lg hover:bg-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white">বিষয় দেখুন</a>
+  </div>
+</section>
+
+<!-- Subjects -->
+<section id="subjects" class="max-w-6xl mx-auto px-4 py-14">
+  <h2 class="text-2xl font-bold text-slate-900">বিষয়সমূহ</h2>
+  <p class="text-slate-600 mt-1">একটি বিষয় বেছে নিন</p>
+  <div id="cards" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+</section>
+
+<!-- Detail -->
+<section id="detail" class="max-w-6xl mx-auto px-4 pb-20 scroll-mt-16">
+  <div id="panel" class="hidden bg-white rounded-2xl border border-slate-200 overflow-hidden">
+    <div id="panelHead" class="px-6 py-8 text-white"></div>
+    <div class="p-6">
+      <label class="block">
+        <span class="sr-only">টপিক খুঁজুন</span>
+        <input id="search" type="search" placeholder="টপিক বা শব্দ খুঁজুন (যেমন: Boyle, SHM, Tense)" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-slate-900">
+      </label>
+      <ol id="topics" class="mt-4 divide-y divide-slate-200"></ol>
+      <div id="notes" class="mt-6"></div>
+      <p id="empty" class="hidden text-slate-500 mt-6">কোনো টপিক পাওয়া যায়নি।</p>
+    </div>
+  </div>
+  <p id="hint" class="text-slate-500 text-center py-10">উপরের কার্ড থেকে একটি বিষয়ে ক্লিক করুন।</p>
+</section>
+
+<footer class="border-t border-slate-200 py-6 text-center text-sm text-slate-500">ভর্তি সিলেবাস গাইড</footer>
+
+<script>
+const subjects = [
+{ id:'cse', name:'CSE', bn:'কম্পিউটার সায়েন্স', color:'bg-indigo-700', ring:'border-indigo-600',
+  topics:[
+  ['Computer Fundamentals','Basic Organization and Functional Units: Hardware, Software, Software and its applications.'],
+  ['Programming','Basic program structure and IDE, pseudo code, header files, data types, operators, variables and expressions, Input and Output, control statement and decision making, loop structure, arrays, library functions, Object oriented programming basics, class & object, Properties of object-oriented programming.'],
+  ['Data Structure','Pointer, linked list, tree, stack, queue, searching, sorting.'],
+  ['Database Management','Database system concept, data models, query languages.'],
+  ['Operating System','Scheduling, memory management, storage and I/O system.'],
+  ['Microprocessor & Microcomputer','8086 Architecture, bus systems, instruction sets, assembly language, interrupt control, memories/storage.'],
+  ['Data Communication & Computer Network','Transmission media, modulation/demodulation, Multiplexing, OSI and TCP/IP model, network topologies, network protocols, IP addressing.'],
+  ['Digital Electronics','Number systems, Boolean algebra, Logic gates, Combinational and sequential logic circuits, Flip-Flops, Registers, Counters, Semiconductor Diodes and Rectifiers, Bipolar Junction Transistor (BJT), JFET, MOSFET, CMOS, Amplifiers.'],
+  ['Basic Electricity','Electricity and Its Nature, Conductor, Semi-Conductor and Insulator. Capacitors and Inductors, Ohm\'s Law & Joule\'s Law, Electrical Circuit.']
+  ],
+  notes:['Programming কন্টেন্ট: C Basic Programming ও Object Oriented Programming (C++/Python) একত্রিত করা হয়েছে।','Discrete Mathematics, Software Development, Computer Graphics কোর্স — এই ডিসিপ্লিনের প্রবিধানে না থাকায় Admission Syllabus থেকে বাদ দেওয়া হয়েছে।','Basic Electricity কোর্সটি ডিসিপ্লিনের নতুন প্রবিধানে থাকায় Admission Syllabus-এ সংযোগ করা হয়েছে।']
+},
+{ id:'math', name:'Mathematics', bn:'গণিত', color:'bg-emerald-700', ring:'border-emerald-600',
+  topics:[
+  ['Algebra','Polynomial, Complex numbers, Permutation, Combination, Binomial theorem, Determinants and Matrix.'],
+  ['Trigonometry','Ratios of associated and compound angles, Transformation of formulae, Multiple angles, Properties and solution of triangles and Inverse circular functions.'],
+  ['Co-ordinate Geometry','Co-ordinates of points, Locus and its equations, Straight lines, Circles, Parabola and Ellipse.'],
+  ['Differential and Integral Calculus','Functions, Graph of a function, Limits, Continuity, Differentiation, Successive differentiation with Leibnitz\'s theorem, Partial differentiation, Integration by substitution, Integration by parts, Partial fractions and Definite integrals.']
+  ]
+},
+{ id:'eng', name:'English', bn:'ইংরেজি', color:'bg-rose-700', ring:'border-rose-600',
+  topics:[
+  ['Uses of Tense','Right form of verbs, correction of errors, subject-verb agreement in sentences, functional use of all kinds of tense.'],
+  ['Sentence Structure','Types of clauses and sentences, changing sentence according to the direction mentioned in brackets, completing sentences with given inputs (phrases, linking words, conjunctions etc.).'],
+  ['Parts of Speech','Identifying the usage of different types of parts of speech according to their place and function in a sentence.'],
+  ['Use of Preposition','Appropriate use of preposition, use of phrasal prepositions.'],
+  ['Idioms and Phrases','Usage of idioms and phrases in written and verbal communication providing accurate meaning.'],
+  ['Voice','Change of voice from active to passive and vice versa.'],
+  ['English Vocabulary','Synonyms, antonyms, homophones, homographs, and homonyms.'],
+  ['Reading','Reading comprehension.'],
+  ['Verbal','Functional use of the main verb, gerund, infinitive, modals, participles.'],
+  ['Translation','Translation from Bengali to English and vice versa.'],
+  ['Punctuation and Capitalization','Use of punctuation marks and capital letters appropriately in the sentence.']
+  ]
+},
+{ id:'chem', name:'Chemistry', bn:'রসায়ন — প্রথম পত্র', color:'bg-amber-700', ring:'border-amber-600',
+  topics:[
+  ['States of Matter','Basic properties of gases, Boyle\'s law & Charles\'s law, absolute temperature (S.T.P /N.T. P), combination of gas laws (PV = nRT), Dalton\'s law of partial pressure, problems related to pressure, volume, temperature and partial pressure for gaseous mixtures, Avogadro\'s hypothesis and constant.'],
+  ['Solution','Ways of expressing concentration: Molarity, molality, normality, solutions and suspensions, Solubility of completely miscible liquids, azeotropes and fractional distillation.'],
+  ['Catalyst & Catalysis','Types, criterion and important industrial applications (NH3, H2SO4, Vanaspati Ghee production) and catalyst poison.'],
+  ['Acid, Base and pH','Modern concept of acid and base, properties of acid and base, pH scale and its uses, buffer solutions, acid-base titration, indicators and their uses.'],
+  ['Electrolysis','Electrical conductor, electrolyte, electrolysis process, electro-plating, galvanization, Faraday\'s laws of electrolysis and industrial applications of electrolysis.'],
+  ['Atomic Structure','Molecular mass, atomic number, mass number, mole and fundamental particle of atom, isotope, isobar and isotone, orbit and orbital, Rutherford\'s and Bohr\'s atomic model, quantum number, electronic configuration based on Aufbau principle, Hund\'s rule and Pauli\'s exclusion principle.'],
+  ['Periodic Table','Introduction to modern periodic table and classification of elements, periodic change of properties of elements, oxides and hydroxides.'],
+  ['Matter and its Changes','Matter, element, compound, mixtures, different types of reaction (exothermic and endothermic reactions), symbol and formula, valency of elements and radicals.'],
+  ['Oxidation and Reduction','Modern concepts of oxidation and reduction, oxidizing agent and reducing agents, oxidation number and oxidation state.'],
+  ['Chemical Bond','Different types of bonds: Ionic bond, covalent bond, polar covalent bond, co-ordinate bond, hydrogen bond.'],
+  ['Water Treatment','Hard and soft water, their advantages and disadvantages, temporary and permanent hardness of water.'],
+  ['Important Ores of Iron, Copper, Aluminum and Zinc','(i) ores (ii) roasting (iii) calcination (iv) smelting (v) alloy (vi) slag, (vii) Flux, important ores of Iron, Copper, Aluminum and Zinc, manufacturing process of iron and copper from its ore, and the properties of (i) Cast Iron (ii) Iron (iii) Steel (iv) Wrought Iron.'],
+  ['Organic Chemistry','Difference between organic and inorganic compounds, homologous series and functional groups of organic compounds.'],
+  ['Hydrocarbons','Saturated and unsaturated hydrocarbons, general method for preparation and properties of alkane, alkene and alkynes as well as their IUPAC nomenclature system.'],
+  ['Alcohol','Classification of alcohol, Fermentation process of ethanol preparation, Enzyme, methylated spirit, power alcohol and absolute alcohol.']
+  ]
+},
+{ id:'phy', name:'Physics', bn:'পদার্থবিজ্ঞান — প্রথম পত্র', color:'bg-sky-700', ring:'border-sky-600',
+  topics:[
+  ['Measurement & Vector Quantities','Principle of measurement, quantities & units, dimensions of units, scalar & vector quantities, vector representation, addition, subtraction & resolutions of vectors, laws of triangle, dot & cross products.'],
+  ['Motion and Force','Classification of motion, displacement, speed, velocity, acceleration, retardation, projectile motion, equation of motion of a projectile, angular velocity & linear velocity, centripetal and centrifugal force, laws of falling bodies, force, Newton\'s laws of motion, resultant of parallel forces, inertia & momentum, principles of conservation of momentum, friction, co-efficient of static friction, angle of repose, merits and demerits of friction, Kepler\'s law, gravity & gravitation, gravitational constant (G), acceleration due to gravity (g), mass & weight, gravitational potential & escape velocity.'],
+  ['Work, Power & Energy','Work, power & energy, principle of the conservation of energy, potential energy (PE) & kinetic energy (KE), efficiency.'],
+  ['Properties of Matter','General and special properties of matter, elasticity & elastic limit, perfectly elastic body & perfectly rigid body, stress & strain, Hook\'s law, various kinds of modulus of elasticity, Poisson\'s ratio, pressure, characteristics of liquid pressure, surface tension & surface energy, angle of contact, capillarity & theory of capillarity, viscosity & co-efficient of viscosity.'],
+  ['Oscillations, Waves & Sound','Periodic and simple harmonic motion (SHM), characteristics of SHM, simple pendulum & second pendulum, effective length, amplitude, phase, complete oscillation, period of oscillation, frequency, laws of simple pendulum, wave motion, transverse & longitudinal waves, progressive & stationary waves, sound & production of sound, interference of sound: constructive and destructive interference, beats and mechanism of formation of beats, infrasonic & ultrasonic (supersonic) sound, velocity of sound, compare the effects of pressure, temperature & humidity on the velocity of sound.'],
+  ['Heat & Thermodynamics','Heat & temperature, Celsius scale of temperature, mercury thermometer, specific heat capacity, thermal capacity, principle of calorimetry, specific latent heat, latent heat of fusion of ice & vaporization of water, specific heat of a solid, effect of heat on dimension of materials, differential expansion in bimetallic strip & thermostat, units co-efficient of linear, superficial and cubical expansion of solids, real and apparent expansion of liquid, methods of heat transfer by conduction, convection & radiation, thermal conductivity (K) & coefficient of thermal conductivity, quantity of heat (Q) flowing through a material, laws of thermodynamics, isothermal and adiabatic change, specific heat of a gas, molar specific heat or molar heat capacity, reversible process and irreversible process, Carnot\'s cycle, efficiency of a Carnot\'s engine, entropy.'],
+  ['Light','Mirror (plane & spherical), image (real & virtual) & magnification, reflection of light, laws of reflection of light, pole, principal axis, center of curvature, radius of curvature, principal focus in case of concave & convex mirrors, general equation of concave and convex mirror, refraction of light, absolute and relative refractive index, total internal reflection & critical angle, refraction of light through a prism, minimum deviation & angle of the prism, lens & uses of lens, general equation of lens (Concave & convex), Power of a Lens.'],
+  ['Modern Physics','Atom models and atomic structure, X-ray, photo electric effect, Einstein\'s photo electric equation, radio-activity, radio-active decay law, half-life & mean-life of radio-active atoms, nuclear fission and Fusion, Space, time & Mass, rest mass theory of relativity, special theory of relativity and its fundamental postulate, different kinds of theory of relativity, length contraction, time dilation, Einstein\'s mass-energy relation.']
+  ]
+}
+];
+
+const bn = {
+'Computer Fundamentals':'কম্পিউটারের মৌলিক বিষয়',
+'Programming':'প্রোগ্রামিং',
+'Data Structure':'ডেটা স্ট্রাকচার',
+'Database Management':'ডেটাবেজ ম্যানেজমেন্ট',
+'Operating System':'অপারেটিং সিস্টেম',
+'Microprocessor & Microcomputer':'মাইক্রোপ্রসেসর ও মাইক্রোকম্পিউটার',
+'Data Communication & Computer Network':'ডেটা কমিউনিকেশন ও কম্পিউটার নেটওয়ার্ক',
+'Digital Electronics':'ডিজিটাল ইলেকট্রনিক্স',
+'Basic Electricity':'মৌলিক বিদ্যুৎ',
+'Algebra':'বীজগণিত',
+'Trigonometry':'ত্রিকোণমিতি',
+'Co-ordinate Geometry':'স্থানাঙ্ক জ্যামিতি',
+'Differential and Integral Calculus':'অন্তরীকরণ ও যোগজীকরণ',
+'Uses of Tense':'কালের ব্যবহার (Tense)',
+'Sentence Structure':'বাক্য গঠন',
+'Parts of Speech':'পদ প্রকরণ',
+'Use of Preposition':'Preposition-এর ব্যবহার',
+'Idioms and Phrases':'বাগধারা ও বাক্যাংশ',
+'Voice':'বাচ্য পরিবর্তন',
+'English Vocabulary':'ইংরেজি শব্দভান্ডার',
+'Reading':'পঠন (Reading)',
+'Verbal':'ভার্বাল',
+'Translation':'অনুবাদ',
+'Punctuation and Capitalization':'যতিচিহ্ন ও বড় হাতের অক্ষর',
+'States of Matter':'পদার্থের অবস্থা',
+'Solution':'দ্রবণ',
+'Catalyst & Catalysis':'প্রভাবক ও প্রভাবন',
+'Acid, Base and pH':'এসিড, ক্ষারক ও pH',
+'Electrolysis':'তড়িৎ বিশ্লেষণ',
+'Atomic Structure':'পরমাণুর গঠন',
+'Periodic Table':'পর্যায় সারণি',
+'Matter and its Changes':'পদার্থ ও তার পরিবর্তন',
+'Oxidation and Reduction':'জারণ ও বিজারণ',
+'Chemical Bond':'রাসায়নিক বন্ধন',
+'Water Treatment':'পানি শোধন',
+'Important Ores of Iron, Copper, Aluminum and Zinc':'লোহা, তামা, অ্যালুমিনিয়াম ও জিংকের গুরুত্বপূর্ণ আকরিক',
+'Organic Chemistry':'জৈব রসায়ন',
+'Hydrocarbons':'হাইড্রোকার্বন',
+'Alcohol':'অ্যালকোহল',
+'Measurement & Vector Quantities':'পরিমাপ ও ভেক্টর রাশি',
+'Motion and Force':'গতি ও বল',
+'Work, Power & Energy':'কাজ, ক্ষমতা ও শক্তি',
+'Properties of Matter':'পদার্থের ধর্ম',
+'Oscillations, Waves & Sound':'দোলন, তরঙ্গ ও শব্দ',
+'Heat & Thermodynamics':'তাপ ও তাপগতিবিদ্যা',
+'Light':'আলোক',
+'Modern Physics':'আধুনিক পদার্থবিজ্ঞান'
+};
+
+const itemsRaw = {
+"Computer Fundamentals":"Basic Organization and Functional Units|কম্পিউটারের মৌলিক গঠন ও কার্যকরী ইউনিট;Hardware|হার্ডওয়্যার;Software|সফটওয়্যার;Software and its applications|সফটওয়্যার ও এর প্রয়োগ",
+"Programming":"Basic program structure and IDE|প্রোগ্রামের মৌলিক কাঠামো ও IDE;Pseudo code|সুডোকোড;Header files|হেডার ফাইল;Data types|ডেটা টাইপ;Operators|অপারেটর;Variables and expressions|চলক ও রাশিমালা;Input and Output|ইনপুট ও আউটপুট;Control statement and decision making|কন্ট্রোল স্টেটমেন্ট ও সিদ্ধান্ত গ্রহণ;Loop structure|লুপ কাঠামো;Arrays|অ্যারে;Library functions|লাইব্রেরি ফাংশন;Object oriented programming basics|অবজেক্ট ওরিয়েন্টেড প্রোগ্রামিংয়ের মূল ধারণা;Class & object|ক্লাস ও অবজেক্ট;Properties of object-oriented programming|অবজেক্ট ওরিয়েন্টেড প্রোগ্রামিংয়ের বৈশিষ্ট্য",
+"Data Structure":"Pointer|পয়েন্টার;Linked list|লিংকড লিস্ট;Tree|ট্রি;Stack|স্ট্যাক;Queue|কিউ;Searching|সার্চিং;Sorting|সর্টিং",
+"Database Management":"Database system concept|ডেটাবেজ সিস্টেমের ধারণা;Data models|ডেটা মডেল;Query languages|কোয়েরি ভাষা",
+"Operating System":"Scheduling|শিডিউলিং;Memory management|মেমরি ব্যবস্থাপনা;Storage and I/O system|স্টোরেজ ও I/O সিস্টেম",
+"Microprocessor & Microcomputer":"8086 Architecture|৮০৮৬ আর্কিটেকচার;Bus systems|বাস সিস্টেম;Instruction sets|ইনস্ট্রাকশন সেট;Assembly language|অ্যাসেম্বলি ভাষা;Interrupt control|ইন্টারাপ্ট কন্ট্রোল;Memories/storage|মেমরি ও স্টোরেজ",
+"Data Communication & Computer Network":"Transmission media|ট্রান্সমিশন মাধ্যম;Modulation/demodulation|মডুলেশন ও ডিমডুলেশন;Multiplexing|মাল্টিপ্লেক্সিং;OSI and TCP/IP model|OSI ও TCP/IP মডেল;Network topologies|নেটওয়ার্ক টপোলজি;Network protocols|নেটওয়ার্ক প্রোটোকল;IP addressing|আইপি অ্যাড্রেসিং",
+"Digital Electronics":"Number systems|সংখ্যা পদ্ধতি;Boolean algebra|বুলিয়ান অ্যালজেবরা;Logic gates|লজিক গেট;Combinational and sequential logic circuits|কম্বিনেশনাল ও সিকোয়েনশিয়াল লজিক সার্কিট;Flip-Flops|ফ্লিপ-ফ্লপ;Registers|রেজিস্টার;Counters|কাউন্টার;Semiconductor Diodes and Rectifiers|সেমিকন্ডাক্টর ডায়োড ও রেকটিফায়ার;Bipolar Junction Transistor (BJT)|বাইপোলার জাংশন ট্রানজিস্টর;JFET|জেফেট;MOSFET|মসফেট;CMOS|সিমস;Amplifiers|অ্যামপ্লিফায়ার",
+"Basic Electricity":"Electricity and Its Nature|বিদ্যুৎ ও এর প্রকৃতি;Conductor, Semi-Conductor and Insulator|পরিবাহী, অর্ধপরিবাহী ও অন্তরক;Capacitors and Inductors|ক্যাপাসিটর ও ইন্ডাক্টর;Ohm's Law & Joule's Law|ওহমের সূত্র ও জুলের সূত্র;Electrical Circuit|বৈদ্যুতিক সার্কিট",
+"Algebra":"Polynomial|বহুপদী;Complex numbers|জটিল সংখ্যা;Permutation|বিন্যাস;Combination|সমাবেশ;Binomial theorem|দ্বিপদী উপপাদ্য;Determinants and Matrix|নির্ণায়ক ও ম্যাট্রিক্স",
+"Trigonometry":"Ratios of associated and compound angles|সংশ্লিষ্ট ও যৌগিক কোণের অনুপাত;Transformation of formulae|সূত্রের রূপান্তর;Multiple angles|গুণিতক কোণ;Properties and solution of triangles|ত্রিভুজের ধর্ম ও সমাধান;Inverse circular functions|বিপরীত বৃত্তীয় ফাংশন",
+"Co-ordinate Geometry":"Co-ordinates of points|বিন্দুর স্থানাঙ্ক;Locus and its equations|সঞ্চারপথ ও এর সমীকরণ;Straight lines|সরলরেখা;Circles|বৃত্ত;Parabola|পরাবৃত্ত;Ellipse|উপবৃত্ত",
+"Differential and Integral Calculus":"Functions|ফাংশন;Graph of a function|ফাংশনের লেখচিত্র;Limits|সীমা;Continuity|ধারাবাহিকতা;Differentiation|অন্তরীকরণ;Successive differentiation with Leibnitz's theorem|লাইবনিজের উপপাদ্যসহ ক্রমিক অন্তরীকরণ;Partial differentiation|আংশিক অন্তরীকরণ;Integration by substitution|প্রতিস্থাপন পদ্ধতিতে যোগজীকরণ;Integration by parts|খণ্ডায়ন পদ্ধতিতে যোগজীকরণ;Partial fractions|আংশিক ভগ্নাংশ;Definite integrals|নির্দিষ্ট যোগজ",
+"Uses of Tense":"Right form of verbs|ক্রিয়ার সঠিক রূপ;Correction of errors|ভুল সংশোধন;Subject-verb agreement in sentences|বাক্যে কর্তা-ক্রিয়ার সামঞ্জস্য;Functional use of all kinds of tense|সব ধরনের Tense-এর প্রয়োগ",
+"Sentence Structure":"Types of clauses and sentences|ক্লজ ও বাক্যের প্রকারভেদ;Changing sentence according to the direction mentioned in brackets|ব্র্যাকেটের নির্দেশ অনুযায়ী বাক্য পরিবর্তন;Completing sentences with given inputs (phrases, linking words, conjunctions etc.)|প্রদত্ত শব্দ, বাক্যাংশ, লিংকিং শব্দ ও সংযোজক দিয়ে বাক্য পূরণ",
+"Parts of Speech":"Identifying the usage of different types of parts of speech according to their place and function in a sentence|বাক্যে স্থান ও কাজ অনুযায়ী বিভিন্ন পদের ব্যবহার শনাক্তকরণ",
+"Use of Preposition":"Appropriate use of preposition|Preposition-এর যথাযথ ব্যবহার;Use of phrasal prepositions|Phrasal Preposition-এর ব্যবহার",
+"Idioms and Phrases":"Usage of idioms and phrases in written and verbal communication providing accurate meaning|লিখিত ও মৌখিক যোগাযোগে সঠিক অর্থে বাগধারা ও বাক্যাংশের ব্যবহার",
+"Voice":"Change of voice from active to passive and vice versa|Active থেকে Passive এবং Passive থেকে Active বাচ্যে পরিবর্তন",
+"English Vocabulary":"Synonyms|সমার্থক শব্দ;Antonyms|বিপরীতার্থক শব্দ;Homophones|সমউচ্চারিত শব্দ;Homographs|সমবানান শব্দ;Homonyms|সমনামী শব্দ",
+"Reading":"Reading comprehension|অনুচ্ছেদ পাঠ ও অনুধাবন",
+"Verbal":"Functional use of the main verb|মূল ক্রিয়ার প্রয়োগ;Gerund|জেরান্ড;Infinitive|ইনফিনিটিভ;Modals|মোডাল;Participles|পার্টিসিপল",
+"Translation":"Translation from Bengali to English and vice versa|বাংলা থেকে ইংরেজি এবং ইংরেজি থেকে বাংলায় অনুবাদ",
+"Punctuation and Capitalization":"Use of punctuation marks and capital letters appropriately in the sentence|বাক্যে যতিচিহ্ন ও বড় হাতের অক্ষরের যথাযথ ব্যবহার",
+"States of Matter":"Basic properties of gases|গ্যাসের মৌলিক ধর্ম;Boyle's law & Charles's law|বয়েলের সূত্র ও চার্লসের সূত্র;Absolute temperature (S.T.P / N.T.P)|পরম তাপমাত্রা (S.T.P / N.T.P);Combination of gas laws (PV = nRT)|গ্যাস সূত্রের সমন্বয় (PV = nRT);Dalton's law of partial pressure|ডাল্টনের আংশিক চাপ সূত্র;Problems related to pressure, volume, temperature and partial pressure for gaseous mixtures|গ্যাসীয় মিশ্রণের চাপ, আয়তন, তাপমাত্রা ও আংশিক চাপ সংক্রান্ত সমস্যা;Avogadro's hypothesis and constant|অ্যাভোগাড্রোর প্রকল্প ও ধ্রুবক",
+"Solution":"Ways of expressing concentration: Molarity, molality, normality|ঘনমাত্রা প্রকাশের পদ্ধতি: মোলারিটি, মোলালিটি, নরমালিটি;Solutions and suspensions|দ্রবণ ও সাসপেনশন;Solubility of completely miscible liquids|সম্পূর্ণ মিশ্রণীয় তরলের দ্রাব্যতা;Azeotropes|অ্যাজিওট্রপ;Fractional distillation|আংশিক পাতন",
+"Catalyst & Catalysis":"Types|প্রকারভেদ;Criterion|বৈশিষ্ট্য;Important industrial applications (NH3, H2SO4, Vanaspati Ghee production)|শিল্পে গুরুত্বপূর্ণ প্রয়োগ (অ্যামোনিয়া, সালফিউরিক এসিড, বনস্পতি ঘি উৎপাদন);Catalyst poison|প্রভাবক বিষ",
+"Acid, Base and pH":"Modern concept of acid and base|এসিড ও ক্ষারের আধুনিক ধারণা;Properties of acid and base|এসিড ও ক্ষারের ধর্ম;pH scale and its uses|pH স্কেল ও এর ব্যবহার;Buffer solutions|বাফার দ্রবণ;Acid-base titration|এসিড-ক্ষার টাইট্রেশন;Indicators and their uses|নির্দেশক ও এর ব্যবহার",
+"Electrolysis":"Electrical conductor|তড়িৎ পরিবাহী;Electrolyte|তড়িৎ বিশ্লেষ্য;Electrolysis process|তড়িৎ বিশ্লেষণ প্রক্রিয়া;Electro-plating|ইলেকট্রোপ্লেটিং;Galvanization|গ্যালভানাইজেশন;Faraday's laws of electrolysis|ফ্যারাডের তড়িৎ বিশ্লেষণ সূত্র;Industrial applications of electrolysis|তড়িৎ বিশ্লেষণের শিল্প প্রয়োগ",
+"Atomic Structure":"Molecular mass|আণবিক ভর;Atomic number|পারমাণবিক সংখ্যা;Mass number|ভর সংখ্যা;Mole and fundamental particle of atom|মোল ও পরমাণুর মৌলিক কণা;Isotope, isobar and isotone|আইসোটোপ, আইসোবার ও আইসোটোন;Orbit and orbital|কক্ষপথ ও অরবিটাল;Rutherford's and Bohr's atomic model|রাদারফোর্ড ও বোরের পরমাণু মডেল;Quantum number|কোয়ান্টাম সংখ্যা;Electronic configuration based on Aufbau principle, Hund's rule and Pauli's exclusion principle|আউফবাউ নীতি, হুন্ডের নিয়ম ও পাউলির বর্জন নীতি অনুযায়ী ইলেকট্রন বিন্যাস",
+"Periodic Table":"Introduction to modern periodic table and classification of elements|আধুনিক পর্যায় সারণি ও মৌলের শ্রেণিবিভাগের পরিচিতি;Periodic change of properties of elements, oxides and hydroxides|মৌল, অক্সাইড ও হাইড্রক্সাইডের ধর্মের পর্যায়বৃত্ত পরিবর্তন",
+"Matter and its Changes":"Matter, element, compound, mixtures|পদার্থ, মৌল, যৌগ ও মিশ্রণ;Different types of reaction (exothermic and endothermic reactions)|বিভিন্ন ধরনের বিক্রিয়া (তাপউৎপাদী ও তাপহারী);Symbol and formula|প্রতীক ও সংকেত;Valency of elements and radicals|মৌল ও মূলকের যোজনী",
+"Oxidation and Reduction":"Modern concepts of oxidation and reduction|জারণ ও বিজারণের আধুনিক ধারণা;Oxidizing agent and reducing agents|জারক ও বিজারক;Oxidation number and oxidation state|জারণ সংখ্যা ও জারণ অবস্থা",
+"Chemical Bond":"Ionic bond|আয়নিক বন্ধন;Covalent bond|সমযোজী বন্ধন;Polar covalent bond|পোলার সমযোজী বন্ধন;Co-ordinate bond|সন্নিবেশ (কো-অর্ডিনেট) বন্ধন;Hydrogen bond|হাইড্রোজেন বন্ধন",
+"Water Treatment":"Hard and soft water|খর ও মৃদু পানি;Their advantages and disadvantages|এদের সুবিধা ও অসুবিধা;Temporary and permanent hardness of water|পানির অস্থায়ী ও স্থায়ী খরতা",
+"Important Ores of Iron, Copper, Aluminum and Zinc":"Ores|আকরিক;Roasting|ভর্জন;Calcination|ভস্মীকরণ;Smelting|স্মেলটিং (গলিয়ে ধাতু নিষ্কাশন);Alloy|সংকর ধাতু;Slag|স্ল্যাগ;Flux|ফ্লাক্স;Important ores of Iron, Copper, Aluminum and Zinc|লোহা, তামা, অ্যালুমিনিয়াম ও জিংকের গুরুত্বপূর্ণ আকরিক;Manufacturing process of iron and copper from its ore|আকরিক থেকে লোহা ও তামা উৎপাদন প্রক্রিয়া;Properties of Cast Iron, Iron, Steel, Wrought Iron|ঢালাই লোহা, লোহা, ইস্পাত ও পেটা লোহার ধর্ম",
+"Organic Chemistry":"Difference between organic and inorganic compounds|জৈব ও অজৈব যৌগের পার্থক্য;Homologous series|সমগোত্রক শ্রেণি;Functional groups of organic compounds|জৈব যৌগের কার্যকরী মূলক",
+"Hydrocarbons":"Saturated and unsaturated hydrocarbons|সম্পৃক্ত ও অসম্পৃক্ত হাইড্রোকার্বন;General method for preparation and properties of alkane, alkene and alkynes|অ্যালকেন, অ্যালকিন ও অ্যালকাইনের প্রস্তুতির সাধারণ পদ্ধতি ও ধর্ম;IUPAC nomenclature system|IUPAC নামকরণ পদ্ধতি",
+"Alcohol":"Classification of alcohol|অ্যালকোহলের শ্রেণিবিভাগ;Fermentation process of ethanol preparation|ইথানল প্রস্তুতির গাঁজন প্রক্রিয়া;Enzyme|এনজাইম;Methylated spirit|মিথিলেটেড স্পিরিট;Power alcohol|পাওয়ার অ্যালকোহল;Absolute alcohol|অ্যাবসোলিউট অ্যালকোহল",
+"Measurement & Vector Quantities":"Principle of measurement|পরিমাপের নীতি;Quantities & units|রাশি ও একক;Dimensions of units|এককের মাত্রা;Scalar & vector quantities|স্কেলার ও ভেক্টর রাশি;Vector representation|ভেক্টরের প্রকাশ;Addition, subtraction & resolutions of vectors|ভেক্টরের যোগ, বিয়োগ ও বিভাজন;Laws of triangle|ত্রিভুজ সূত্র;Dot & cross products|ডট ও ক্রস গুণন",
+"Motion and Force":"Classification of motion|গতির শ্রেণিবিভাগ;Displacement|সরণ;Speed|দ্রুতি;Velocity|বেগ;Acceleration|ত্বরণ;Retardation|মন্দন;Projectile motion|প্রাসের গতি;Equation of motion of a projectile|প্রাসের গতির সমীকরণ;Angular velocity & linear velocity|কৌণিক বেগ ও রৈখিক বেগ;Centripetal and centrifugal force|কেন্দ্রমুখী ও কেন্দ্রবিমুখী বল;Laws of falling bodies|মুক্তভাবে পড়ন্ত বস্তুর সূত্র;Force|বল;Newton's laws of motion|নিউটনের গতিসূত্র;Resultant of parallel forces|সমান্তরাল বলের লব্ধি;Inertia & momentum|জড়তা ও ভরবেগ;Principles of conservation of momentum|ভরবেগের সংরক্ষণ নীতি;Friction|ঘর্ষণ;Co-efficient of static friction|স্থিতি ঘর্ষণ গুণাঙ্ক;Angle of repose|স্থিতিকোণ;Merits and demerits of friction|ঘর্ষণের সুবিধা ও অসুবিধা;Kepler's law|কেপলারের সূত্র;Gravity & gravitation|অভিকর্ষ ও মহাকর্ষ;Gravitational constant (G)|মহাকর্ষীয় ধ্রুবক (G);Acceleration due to gravity (g)|অভিকর্ষজ ত্বরণ (g);Mass & weight|ভর ও ওজন;Gravitational potential & escape velocity|মহাকর্ষীয় বিভব ও মুক্তি বেগ",
+"Work, Power & Energy":"Work, power & energy|কাজ, ক্ষমতা ও শক্তি;Principle of the conservation of energy|শক্তির সংরক্ষণ নীতি;Potential energy (PE) & kinetic energy (KE)|বিভব শক্তি ও গতিশক্তি;Efficiency|দক্ষতা",
+"Properties of Matter":"General and special properties of matter|পদার্থের সাধারণ ও বিশেষ ধর্ম;Elasticity & elastic limit|স্থিতিস্থাপকতা ও স্থিতিস্থাপক সীমা;Perfectly elastic body & perfectly rigid body|পূর্ণ স্থিতিস্থাপক বস্তু ও পূর্ণ দৃঢ় বস্তু;Stress & strain|পীড়ন ও বিকৃতি;Hook's law|হুকের সূত্র;Various kinds of modulus of elasticity|স্থিতিস্থাপক গুণাঙ্কের বিভিন্ন প্রকার;Poisson's ratio|পয়সনের অনুপাত;Pressure|চাপ;Characteristics of liquid pressure|তরল চাপের বৈশিষ্ট্য;Surface tension & surface energy|পৃষ্ঠটান ও পৃষ্ঠশক্তি;Angle of contact|স্পর্শ কোণ;Capillarity & theory of capillarity|কৈশিকতা ও কৈশিকতার তত্ত্ব;Viscosity & co-efficient of viscosity|সান্দ্রতা ও সান্দ্রতা গুণাঙ্ক",
+"Oscillations, Waves & Sound":"Periodic and simple harmonic motion (SHM)|পর্যাবৃত্ত ও সরল ছন্দিত গতি (SHM);Characteristics of SHM|SHM-এর বৈশিষ্ট্য;Simple pendulum & second pendulum|সরল দোলক ও সেকেন্ড দোলক;Effective length|কার্যকর দৈর্ঘ্য;Amplitude|বিস্তার;Phase|দশা;Complete oscillation|পূর্ণ দোলন;Period of oscillation|দোলনকাল;Frequency|কম্পাঙ্ক;Laws of simple pendulum|সরল দোলকের সূত্র;Wave motion|তরঙ্গ গতি;Transverse & longitudinal waves|অনুপ্রস্থ ও অনুদৈর্ঘ্য তরঙ্গ;Progressive & stationary waves|প্রগামী ও স্থির তরঙ্গ;Sound & production of sound|শব্দ ও শব্দের উৎপত্তি;Interference of sound: constructive and destructive interference|শব্দের ব্যতিচার: গঠনমূলক ও ধ্বংসাত্মক ব্যতিচার;Beats and mechanism of formation of beats|স্বরকম্প ও স্বরকম্প সৃষ্টির কৌশল;Infrasonic & ultrasonic (supersonic) sound|অবশ্রাব্য ও অতিশ্রাব্য (শব্দোত্তর) শব্দ;Velocity of sound|শব্দের বেগ;Compare the effects of pressure, temperature & humidity on the velocity of sound|শব্দের বেগের উপর চাপ, তাপমাত্রা ও আর্দ্রতার প্রভাবের তুলনা",
+"Heat & Thermodynamics":"Heat & temperature|তাপ ও তাপমাত্রা;Celsius scale of temperature|সেলসিয়াস তাপমাত্রা স্কেল;Mercury thermometer|পারদ থার্মোমিটার;Specific heat capacity|আপেক্ষিক তাপ;Thermal capacity|তাপধারণ ক্ষমতা;Principle of calorimetry|ক্যালরিমিতির নীতি;Specific latent heat|আপেক্ষিক লীনতাপ;Latent heat of fusion of ice & vaporization of water|বরফের গলনের ও পানির বাষ্পীভবনের লীনতাপ;Specific heat of a solid|কঠিন পদার্থের আপেক্ষিক তাপ;Effect of heat on dimension of materials|পদার্থের মাত্রার উপর তাপের প্রভাব;Differential expansion in bimetallic strip & thermostat|দ্বিধাতব পাত ও থার্মোস্ট্যাটে পার্থক্যমূলক প্রসারণ;Co-efficient of linear, superficial and cubical expansion of solids|কঠিন পদার্থের দৈর্ঘ্য, ক্ষেত্র ও আয়তন প্রসারণ গুণাঙ্ক;Real and apparent expansion of liquid|তরলের প্রকৃত ও আপাত প্রসারণ;Methods of heat transfer by conduction, convection & radiation|তাপ সঞ্চালন পদ্ধতি: পরিবহন, পরিচলন ও বিকিরণ;Thermal conductivity (K) & coefficient of thermal conductivity|তাপ পরিবাহিতা (K) ও তাপ পরিবাহিতার গুণাঙ্ক;Quantity of heat (Q) flowing through a material|পদার্থের মধ্য দিয়ে প্রবাহিত তাপের পরিমাণ (Q);Laws of thermodynamics|তাপগতিবিদ্যার সূত্র;Isothermal and adiabatic change|সমোষ্ণ ও রুদ্ধতাপীয় পরিবর্তন;Specific heat of a gas|গ্যাসের আপেক্ষিক তাপ;Molar specific heat or molar heat capacity|মোলার আপেক্ষিক তাপ বা মোলার তাপধারণ ক্ষমতা;Reversible process and irreversible process|প্রত্যাবর্তী ও অপ্রত্যাবর্তী প্রক্রিয়া;Carnot's cycle|কার্নো চক্র;Efficiency of a Carnot's engine|কার্নো ইঞ্জিনের দক্ষতা;Entropy|এনট্রপি",
+"Light":"Mirror (plane & spherical)|দর্পণ (সমতল ও গোলীয়);Image (real & virtual) & magnification|প্রতিবিম্ব (বাস্তব ও অবাস্তব) ও বিবর্ধন;Reflection of light|আলোর প্রতিফলন;Laws of reflection of light|আলোর প্রতিফলনের সূত্র;Pole|মেরু;Principal axis|প্রধান অক্ষ;Center of curvature|বক্রতার কেন্দ্র;Radius of curvature|বক্রতার ব্যাসার্ধ;Principal focus in case of concave & convex mirrors|অবতল ও উত্তল দর্পণের প্রধান ফোকাস;General equation of concave and convex mirror|অবতল ও উত্তল দর্পণের সাধারণ সমীকরণ;Refraction of light|আলোর প্রতিসরণ;Absolute and relative refractive index|পরম ও আপেক্ষিক প্রতিসরাঙ্ক;Total internal reflection & critical angle|পূর্ণ অভ্যন্তরীণ প্রতিফলন ও সংকট কোণ;Refraction of light through a prism|প্রিজমের মধ্য দিয়ে আলোর প্রতিসরণ;Minimum deviation & angle of the prism|ন্যূনতম বিচ্যুতি ও প্রিজম কোণ;Lens & uses of lens|লেন্স ও লেন্সের ব্যবহার;General equation of lens (Concave & convex)|লেন্সের সাধারণ সমীকরণ (অবতল ও উত্তল);Power of a Lens|লেন্সের ক্ষমতা",
+"Modern Physics":"Atom models and atomic structure|পরমাণু মডেল ও পরমাণুর গঠন;X-ray|এক্স-রে;Photo electric effect|আলোক তড়িৎ ক্রিয়া;Einstein's photo electric equation|আইনস্টাইনের আলোক তড়িৎ সমীকরণ;Radio-activity|তেজস্ক্রিয়তা;Radio-active decay law|তেজস্ক্রিয় ক্ষয় সূত্র;Half-life & mean-life of radio-active atoms|তেজস্ক্রিয় পরমাণুর অর্ধায়ু ও গড় আয়ু;Nuclear fission and Fusion|নিউক্লিয় বিভাজন ও সংযোজন;Space, time & Mass|স্থান, সময় ও ভর;Rest mass|স্থির ভর;Theory of relativity|আপেক্ষিকতা তত্ত্ব;Special theory of relativity and its fundamental postulate|বিশেষ আপেক্ষিকতা তত্ত্ব ও এর মৌলিক স্বীকার্য;Different kinds of theory of relativity|আপেক্ষিকতা তত্ত্বের বিভিন্ন ধরন;Length contraction|দৈর্ঘ্য সংকোচন;Time dilation|সময় দীর্ঘায়ন;Einstein's mass-energy relation|আইনস্টাইনের ভর-শক্তি সম্পর্ক"
+};
+const items = {};
+for (const k in itemsRaw) items[k] = itemsRaw[k].split(';').map(x => x.split('|'));
+
+const $ = id => document.getElementById(id);
+let current = null;
+
+// subject cards
+$('cards').innerHTML = subjects.map(s => `
+  <button data-id="${s.id}" class="card text-left bg-white rounded-xl border-2 border-slate-200 p-6 hover:border-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 transition-colors">
+    <span class="block w-10 h-1.5 rounded ${s.color} mb-4"></span>
+    <span class="block text-xl font-bold text-slate-900">${s.name}</span>
+    <span class="block text-slate-600 mt-1">${s.bn}</span>
+    <span class="block mt-4 text-sm font-medium text-slate-500">${s.topics.length}টি টপিক</span>
+  </button>`).join('');
+
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+function renderTopics(q=''){
+  const s = current, term = q.trim().toLowerCase();
+  const list = s.topics.filter(([t,d]) => (t+' '+(bn[t]||'')+' '+(items[t]||[]).flat().join(' ')).toLowerCase().includes(term));
+  $('topics').innerHTML = list.map(([t,d],i) => `
+    <li class="py-5 flex gap-4">
+      <span class="shrink-0 w-9 h-9 rounded-full ${s.color} text-white font-bold flex items-center justify-center">${s.topics.findIndex(x=>x[0]===t)+1}</span>
+      <div>
+        <h3 class="text-xl font-extrabold text-slate-900">${esc(t)} <span class="font-bold text-slate-500">--&gt;</span> <span class="font-extrabold">(${esc(bn[t]||t)})</span></h3>
+        <ul class="mt-3 list-disc pl-5 space-y-1.5 text-slate-700 leading-relaxed marker:text-slate-400">
+          ${(items[t]||[[d,'']]).map(([e,b]) => `<li><span class="font-semibold text-slate-900">${esc(e)}</span> --&gt; (${esc(b)})</li>`).join('')}
+        </ul>
+      </div>
+    </li>`).join('');
+  $('empty').classList.toggle('hidden', list.length>0);
+  $('notes').innerHTML = (s.notes && !term) ? `
+    <div class="rounded-xl bg-slate-100 p-5">
+      <h3 class="font-bold text-slate-900">মন্তব্য</h3>
+      <ul class="mt-2 list-disc pl-5 space-y-1 text-slate-700">${s.notes.map(n=>`<li>${n}</li>`).join('')}</ul>
+    </div>` : '';
+}
+
+function open(id){
+  current = subjects.find(s => s.id===id);
+  document.querySelectorAll('.card').forEach(c => {
+    const on = c.dataset.id===id;
+    c.classList.toggle('border-slate-900', on);
+    c.classList.toggle('border-slate-200', !on);
+  });
+  $('panelHead').className = 'px-6 py-8 text-white ' + current.color;
+  $('panelHead').innerHTML = `<h2 class="text-2xl sm:text-3xl font-bold">${current.name}</h2><p class="mt-1 opacity-90">${current.bn} · মোট ${current.topics.length}টি টপিক</p>`;
+  $('search').value='';
+  renderTopics();
+  $('panel').classList.remove('hidden');
+  $('hint').classList.add('hidden');
+  $('detail').scrollIntoView({behavior:'smooth'});
+}
+
+$('cards').addEventListener('click', e => {
+  const b = e.target.closest('.card'); if(b) open(b.dataset.id);
+});
+$('search').addEventListener('input', e => renderTopics(e.target.value));
+</script>
+</body>
+</html>
